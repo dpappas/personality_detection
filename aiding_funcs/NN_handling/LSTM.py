@@ -17,8 +17,10 @@ def create_simple_LSTM (LSTM_size, Dense_size, embeddings, max_input_length, is_
                         trainable=is_trainable,
                         input_length = max_input_length))
     model.add(LSTM(LSTM_size, activation = 'sigmoid'))
-    model.add(Dense(Dense_size, activation = 'sigmoid',W_regularizer=l1(0.2), activity_regularizer=activity_l1(0.2)))
-    model.add(Dense(out_dim, activation = 'linear',W_regularizer=l1(0.2), activity_regularizer=activity_l1(0.2)))
+    #model.add(Dense(Dense_size, activation = 'sigmoid',W_regularizer=l1(0.2), activity_regularizer=activity_l1(0.2)))
+    model.add(Dense(Dense_size, activation = 'sigmoid'))
+    #model.add(Dense(out_dim, activation = 'linear',W_regularizer=l1(0.2), activity_regularizer=activity_l1(0.2)))
+    model.add(Dense(out_dim, activation = 'linear'))
     model.compile(loss='rmse', optimizer='sgd') # kalutera leei rmsprop o fchollet  enw  adam leei enas allos
     return model
 

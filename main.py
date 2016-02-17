@@ -64,14 +64,14 @@ from aiding_funcs.embeddings_handling import get_the_folds
 from keras.callbacks import EarlyStopping
 
 print('loading V.p and emb.p')
-V = pickle.load( open( "V.p", "rb" ) )
-emb = pickle.load( open( "emb.p", "rb" ) )
+V = pickle.load( open( "./pickles/V.p", "rb" ) )
+emb = pickle.load( open( "./pickles/emb.p", "rb" ) )
 
 print('loading train.p')
-train = pickle.load( open( "train.p", "rb" ) )
+train = pickle.load( open( "./pickles/train.p", "rb" ) )
 
 print('loading test.p')
-test = pickle.load( open( "test.p", "rb" ) )
+test = pickle.load( open( "./pickles/test.p", "rb" ) )
 
 
 '''
