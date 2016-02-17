@@ -98,8 +98,8 @@ t_l, T_l = MaxMin(test['labels'], train['labels'])
 get_CNN_results(model,train['features'],T_l,train['features'],T_l)
 get_CNN_results(model,train['features'],T_l,test['features'],t_l)
 
-t = model.fit(train['features'],T_l, batch_size=64, nb_epoch=80, validation_split=0.2)
-scores = model.evaluate(test['features'],t_l)
+#t = model.fit(train['features'],T_l, batch_size=64, nb_epoch=1500)
+#scores = model.evaluate(test['features'],t_l)
 
 '''
 CNN basic Trainable
@@ -111,7 +111,7 @@ Dense_size = 100
 max_input_length = test['features'].shape[1]
 is_trainable = True
 opt = 'adam'
-model = create_simple_CNN_2D (CNN_filters, CNN_rows, Dense_size, emb, max_input_length, is_trainable)
+model = create_simple_CNN_2D (CNN_filters, CNN_rows, Dense_size, emb, max_input_length, is_trainable, opt)
 get_CNN_results(model,train['features'],train['labels'],test['features'],test['labels'])
 
 
@@ -126,7 +126,7 @@ max_input_length = test['features'].shape[1]
 in_dim = 1193514
 emb_size = 200
 opt = 'adam'
-model = create_simple_CNN_2D_no_emb (CNN_filters, CNN_rows, Dense_size, max_input_length, emb_size, in_dim)
+model = create_simple_CNN_2D_no_emb (CNN_filters, CNN_rows, Dense_size, max_input_length, emb_size, in_dim, opt)
 get_CNN_results(model,train['features'],train['labels'],test['features'],test['labels'])
 
 
@@ -139,7 +139,7 @@ LSTM_size = 10
 Dense_size = 10
 max_input_length = test['features'].shape[1]
 opt = 'adam'
-model = create_simple_LSTM (LSTM_size, Dense_size, emb, max_input_length, is_trainable)
+model = create_simple_LSTM (LSTM_size, Dense_size, emb, max_input_length, is_trainable, opt)
 early_stop = EarlyStopping(monitor='val_loss',patience=5)
 t = model.fit(
                 train['features'],
@@ -162,7 +162,7 @@ LSTM_size = 10
 Dense_size = 10
 max_input_length = test['features'].shape[1]
 opt = 'adam'
-model = create_simple_LSTM (LSTM_size, Dense_size, emb, max_input_length, is_trainable)
+model = create_simple_LSTM (LSTM_size, Dense_size, emb, max_input_length, is_trainable, opt)
 #early_stop = EarlyStopping(monitor='loss',patience=30)
 t = model.fit(
                 train['features'],
@@ -189,7 +189,7 @@ LSTM_size = 100
 max_input_length = test['features'].shape[1]
 Dense_sizes = [100,100,100,100,100,100,100,100]
 opt = 'adam'
-model = create_extreme_LSTM (LSTM_size, Dense_sizes, emb, max_input_length, is_trainable)
+model = create_extreme_LSTM (LSTM_size, Dense_sizes, emb, max_input_length, is_trainable, opt)
 early_stop = EarlyStopping(monitor='val_loss',patience=5)
 t = model.fit(
                 train['features'],
@@ -212,7 +212,7 @@ is_trainable = False
 LSTM_size = 200
 max_input_length = test['features'].shape[1]
 Dense_sizes = [100]
-model = create_stacked_LSTM (LSTM_size, Dense_sizes, emb, max_input_length, is_trainable)
+model = create_stacked_LSTM (LSTM_size, Dense_sizes, emb, max_input_length, is_trainable, opt)
 opt = 'adam'
 early_stop = EarlyStopping(monitor='loss',patience=20)
 t = model.fit(
