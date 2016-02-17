@@ -19,6 +19,7 @@ def get_mins(test_labels,train_labels):
 test_labels = test['labels']
 train_labels = train['labels']
 MaxMin(test_labels,train_labels)
+
 '''
 
 def MaxMin(test_labels,train_labels):
@@ -26,10 +27,9 @@ def MaxMin(test_labels,train_labels):
    mins = get_mins(test_labels,train_labels)
    t = np.array(test_labels)
    for i in range(t.shape[1]):
-       for i in range(t.shape[1]):
-        t[:,i] = (t[:,i] - mins[i])/(maxs[i]-mins[i])
+       t[:,i] = (t[:, i] - mins[i])/(maxs[i]-mins[i])
    T = np.array(train_labels)
    for i in range(T.shape[1]):
-       T[:,i] = (T[:,i] - mins[i])/(maxs[i]-mins[i])
+       T[:,i] = (T[:, i] - mins[i])/(maxs[i]-mins[i])
    return t,T
 

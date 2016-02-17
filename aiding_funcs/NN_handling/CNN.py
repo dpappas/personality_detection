@@ -15,7 +15,7 @@ from keras.regularizers import l1, activity_l1
 
 
 
-def create_simple_CNN (nb_filter, filter_length, Dense_size, embeddings, trainable):
+def create_simple_CNN (nb_filter, filter_length, Dense_size, embeddings, trainable, opt = 'sgd'):
     max_features = embeddings.shape[0]
     embedding_dims = embeddings.shape[-1]
     out_dim = 5
@@ -28,11 +28,11 @@ def create_simple_CNN (nb_filter, filter_length, Dense_size, embeddings, trainab
     model.add(Flatten())
     model.add(Dense(Dense_size))
     model.add(Dense(out_dim, activation='linear'))
-    model.compile(loss='rmse', optimizer='sgd')
+    model.compile(loss='rmse', optimizer=opt)
 
 
 
-def create_simple_CNN_2D (CNN_filters, CNN_rows, Dense_size, embeddings, max_input_length, is_trainable):
+def create_simple_CNN_2D (CNN_filters, CNN_rows, Dense_size, embeddings, max_input_length, is_trainable, opt = 'sgd'):
     D = embeddings.shape[-1]
     cols = D
     out_dim = 5
@@ -45,11 +45,11 @@ def create_simple_CNN_2D (CNN_filters, CNN_rows, Dense_size, embeddings, max_inp
     model.add(Flatten())
     model.add(Dense(Dense_size, activation='sigmoid'))
     model.add(Dense(out_dim, activation='linear'))
-    model.compile(loss='rmse', optimizer='sgd')
+    model.compile(loss='rmse', optimizer=opt)
     return model
 
 
-def create_simple_CNN_2D_no_emb (CNN_filters, CNN_rows, Dense_size, max_input_length, emb_size, in_dim):
+def create_simple_CNN_2D_no_emb (CNN_filters, CNN_rows, Dense_size, max_input_length, emb_size, in_dim, opt = 'sgd'):
     out_dim = 5
     model = Sequential()
     model.add(Embedding(input_dim = in_dim, output_dim=emb_size, trainable=True, input_length = max_input_length))
@@ -60,7 +60,7 @@ def create_simple_CNN_2D_no_emb (CNN_filters, CNN_rows, Dense_size, max_input_le
     model.add(Flatten())
     model.add(Dense(Dense_size, activation='sigmoid'))
     model.add(Dense(out_dim, activation='linear'))
-    model.compile(loss='rmse', optimizer='sgd')
+    model.compile(loss='rmse', optimizer=opt)
     return model
 
 def get_CNN_results(model,train_x,train_y,test_x,test_y):
