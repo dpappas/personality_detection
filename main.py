@@ -73,6 +73,14 @@ train = pickle.load( open( "./pickles/train.p", "rb" ) )
 print('loading test.p')
 test = pickle.load( open( "./pickles/test.p", "rb" ) )
 
+'''
+V = pickle.load( open( "./V.p", "rb" ) )
+emb = pickle.load( open( "./emb.p", "rb" ) )
+train = pickle.load( open( "./train.p", "rb" ) )
+test = pickle.load( open( "./test.p", "rb" ) )
+
+'''
+
 
 '''
 CNN basic
