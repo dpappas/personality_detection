@@ -75,7 +75,7 @@ def create_CNN(
                 activity_regularizer=activity_l2(l2ar)
         )
     )
-    model.compile(loss='rmse', optimizer=opt)
+    model.compile(loss='mse', optimizer=opt)
     return model
 
 def create_simple_CNN (nb_filter, filter_length, Dense_size, embeddings, trainable, opt = 'sgd'):
@@ -91,7 +91,7 @@ def create_simple_CNN (nb_filter, filter_length, Dense_size, embeddings, trainab
     model.add(Flatten())
     model.add(Dense(Dense_size))
     model.add(Dense(out_dim, activation='linear'))
-    model.compile(loss='rmse', optimizer=opt)
+    model.compile(loss='mse', optimizer=opt)
 
 
 
@@ -108,7 +108,7 @@ def create_simple_CNN_2D (CNN_filters, CNN_rows, Dense_size, embeddings, max_inp
     model.add(Flatten())
     model.add(Dense(Dense_size, activation='sigmoid'))
     model.add(Dense(out_dim, activation='linear'))
-    model.compile(loss='rmse', optimizer=opt)
+    model.compile(loss='mse', optimizer=opt)
     return model
 
 
@@ -123,7 +123,7 @@ def create_simple_CNN_2D_no_emb (CNN_filters, CNN_rows, Dense_size, max_input_le
     model.add(Flatten())
     model.add(Dense(Dense_size, activation='sigmoid'))
     model.add(Dense(out_dim, activation='linear'))
-    model.compile(loss='rmse', optimizer=opt)
+    model.compile(loss='mse', optimizer=opt)
     return model
 
 def get_CNN_results(model,train_x,train_y,test_x,test_y):

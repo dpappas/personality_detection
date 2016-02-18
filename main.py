@@ -38,9 +38,9 @@ T_l = MaxMinFit(train['labels'], mins, maxs)
 t_l = MaxMinFit(test['labels'], mins, maxs)
 
 
-Dense_sizes = [10,10,10]
-Dense_l2_regularizers = [0.01,0.01,0.01,0.01]
-Dense_acivity_l2_regularizers = [0.01,0.01,0.01,0.01]
+Dense_sizes = [100,100,100]
+Dense_l2_regularizers = [0.5,0.5,0.5,0.5]
+Dense_acivity_l2_regularizers = [0.5,0.5,0.5,0.5]
 CNN_filters = 10
 CNN_rows = 2
 Dense_size = 100
@@ -58,13 +58,19 @@ model = create_CNN(
         is_trainable,                       # True if the embedding layer is trainable
         opt = 'sgd',                        # optimizer
     )
-t = model.fit(train['features'],T_l, batch_size=64, nb_epoch=1600)
+t = model.fit(
+    train['features'],
+    T_l,
+    batch_size=64,
+    nb_epoch=1000,
+    validation_split=0.2
+)
 pred = model.predict(test['features'])
 print(myRMSE(pred, t_l, mins, maxs))
 pred = model.predict(train['features'])
 print(myRMSE(pred, T_l, mins, maxs))
 
-
+scores = model.evaluate(train['features'],T_l)
 
 
 

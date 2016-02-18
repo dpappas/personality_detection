@@ -21,7 +21,7 @@ def create_simple_LSTM (LSTM_size, Dense_size, embeddings, max_input_length, is_
     model.add(Dense(Dense_size, activation = 'sigmoid'))
     #model.add(Dense(out_dim, activation = 'linear',W_regularizer=l1(0.2), activity_regularizer=activity_l1(0.2)))
     model.add(Dense(out_dim, activation = 'linear'))
-    model.compile(loss='rmse', optimizer= opt) # kalutera leei rmsprop o fchollet  enw  adam leei enas allos
+    model.compile(loss='mse', optimizer= opt) # kalutera leei rmsprop o fchollet  enw  adam leei enas allos
     return model
 
 
@@ -41,7 +41,7 @@ def create_extreme_LSTM (LSTM_size, Dense_sizes, embeddings, max_input_length, i
         model.add(Activation('sigmoid'))
     model.add(Dense(out_dim))
     model.add(Activation('linear'))
-    model.compile(loss='rmse', optimizer=opt)
+    model.compile(loss='mse', optimizer=opt)
     return model
 
 
@@ -65,7 +65,7 @@ def create_stacked_LSTM (LSTM_size, Dense_sizes, embeddings, max_input_length, i
         model.add(Activation('sigmoid'))
     model.add(Dense(out_dim))
     model.add(Activation('linear'))
-    model.compile(loss='rmse', optimizer=opt)
+    model.compile(loss='mse', optimizer=opt)
     return model
 
 
