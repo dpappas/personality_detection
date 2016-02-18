@@ -14,6 +14,69 @@ from keras.callbacks import EarlyStopping
 from keras.regularizers import l1, activity_l1, l2, activity_l2
 
 
+def create_CNN(
+        CNN_filters,                        # # of filters
+        CNN_rows,                           # # of rows per filter
+        Dense_sizes,                        # matrix of intermediate Dense layers
+        Dense_l2_regularizers,              # matrix with the l2 regularizers for the dense layers
+        Dense_acivity_l2_regularizers,      # matrix with the l2 activity regularizers for the dense layers
+        embeddings,                         # pretrained embeddings or None if there are not any
+        max_input_length,                   # maximum length of sentences
+        is_trainable,                       # True if the embedding layer is trainable
+        opt = 'sgd',                        # optimizer
+    ):
+    D = embeddings.shape[-1]
+    cols = D
+    out_dim = 5
+    model = Sequential()
+    if(embeddings != None):
+        model.add(
+            Embedding(
+                input_dim = embeddings.shape[0],
+                output_dim=D,
+                weights=[embeddings],
+                trainable=is_trainable,
+                input_length = max_input_length
+            )
+        )
+    else:
+        model.add(
+            Embedding(
+                input_dim = embeddings.shape[0],
+                output_dim=D,
+                trainable=True,
+                input_length = max_input_length
+            )
+        )
+    model.add(Reshape((1, max_input_length, D)))
+    model.add(Convolution2D( CNN_filters, CNN_rows, cols, dim_ordering='th', activation='sigmoid' ))
+    sh = model.layers[-1].output_shape
+    model.add(MaxPooling2D(pool_size=(sh[-2], sh[-1]),dim_ordering = 'th'))
+    model.add(Flatten())
+    for i in range(len(Dense_sizes)):
+        Dense_size = Dense_sizes[i]
+        l2r = Dense_l2_regularizers[i]
+        l2ar = Dense_acivity_l2_regularizers[i]
+        model.add(
+            Dense(
+                Dense_size,
+                activation = 'sigmoid',
+                W_regularizer=l2(l2r),
+                activity_regularizer=activity_l2(l2ar)
+            )
+        )
+    l2r = Dense_l2_regularizers[-1]
+    l2ar = Dense_acivity_l2_regularizers[-1]
+    model.add(
+        Dense(
+            out_dim,
+            activation='linear',
+                W_regularizer=l2(l2r),
+                activity_regularizer=activity_l2(l2ar)
+        )
+    )
+    model.compile(loss='rmse', optimizer=opt)
+    return model
 
 def create_simple_CNN (nb_filter, filter_length, Dense_size, embeddings, trainable, opt = 'sgd'):
     max_features = embeddings.shape[0]

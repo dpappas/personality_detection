@@ -25,7 +25,6 @@ def create_simple_LSTM (LSTM_size, Dense_size, embeddings, max_input_length, is_
     return model
 
 
-
 def create_extreme_LSTM (LSTM_size, Dense_sizes, embeddings, max_input_length, is_trainable, opt = 'sgd'):
     D = embeddings.shape[-1]
     out_dim = 5
