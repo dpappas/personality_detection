@@ -8,6 +8,7 @@ __author__ = 'Dimitris'
 import pickle
 from aiding_funcs.NN_handling.CNN import create_simple_CNN_2D, create_CNN
 from aiding_funcs.label_handling import MaxMin, myRMSE, MaxMinFit
+from aiding_funcs.embeddings_handling import get_the_folds
 
 print('loading V.p and emb.p')
 V = pickle.load( open( "./V.p", "rb" ) )
@@ -65,6 +66,7 @@ t = model.fit(
     nb_epoch=1000,
     validation_split=0.2
 )
+
 pred = model.predict(test['features'])
 print(myRMSE(pred, t_l, mins, maxs))
 pred = model.predict(train['features'])
@@ -75,6 +77,34 @@ scores = model.evaluate(train['features'],T_l)
 
 
 
+
+
+
+Dense_sizes = [100,100,100]
+Dense_l2_regularizers = [0.001,0.001,0.001,0.001]
+Dense_acivity_l2_regularizers = [0.001,0.001,0.001,0.001]
+CNN_filters = 100
+CNN_rows = 2
+max_input_length = test['features'].shape[1]
+is_trainable = False
+opt = 'adam'
+
+model2 = create_CNN(
+        CNN_filters,                        # # of filters
+        CNN_rows,                           # # of rows per filter
+        Dense_sizes,                        # matrix of intermediate Dense layers
+        Dense_l2_regularizers,              # matrix with the l2 regularizers for the dense layers
+        Dense_acivity_l2_regularizers,      # matrix with the l2 activity regularizers for the dense layers
+        emb,                                # pretrained embeddings or None if there are not any
+        max_input_length,                   # maximum length of sentences
+        is_trainable,                       # True if the embedding layer is trainable
+        opt,                                # optimizer
+    )
+t = model2.fit( train['features'], T_l, batch_size=train['features'].shape[0], nb_epoch=200, validation_split=0.2)
+model.evaluate(train['features'],T_l)
+
+no_of_folds = 10
+folds = get_the_folds(train,no_of_folds)
 
 
 

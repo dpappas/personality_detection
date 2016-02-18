@@ -164,28 +164,32 @@ ena neo dictionary me keys 0:n-1 kai se kathe ena apo afta
 periexetai ena neo dictionary me keys ta idia me to data alla megethos data.shape[0]/n
 '''
 def get_the_folds(data,nfolds):
+    ndata = np.copy(data)
+    for k in ndata.keys():
+        if(type(ndata[k]) != np.ndarray):
+            ndata[k] = np.array(ndata[k])
     ret = dict()
-    m = data[data.keys()[0]].shape[0]
-    for k in data.keys():
-        if(data[k].shape[0] != m):
+    m = ndata[ndata.keys()[0]].shape[0]
+    for k in ndata.keys():
+        if(ndata[k].shape[0] != m):
             print('Error in get_the_folds. \nThe first dim must be the same for all.')
             return None
     for i in range(nfolds):
         ret[i] = None
     i = 0
-    temp = data[data.keys()[0]].shape[0]
+    temp = ndata[ndata.keys()[0]].shape[0]
     while ( temp>0 ):
-        rint = random.randint(0,data[data.keys()[0]].shape[0]-1)
+        rint = random.randint(0,ndata[ndata.keys()[0]].shape[0]-1)
         if(ret[i] is None):
             ret[i] = {}
-            for k in data.keys() :
-                ret[i][k] = np.array([data[k][rint]])
+            for k in ndata.keys() :
+                ret[i][k] = np.array([ndata[k][rint]])
         else:
-            for k in data.keys() :
-                ret[i][k] = np.append(ret[i][k], [data[k][rint]] , axis=0)
-        for k in data.keys() :
-            data[k] = np.delete(data[k], rint, 0)
-        temp = data[data.keys()[0]].shape[0]
+            for k in ndata.keys() :
+                ret[i][k] = np.append(ret[i][k], [ndata[k][rint]] , axis=0)
+        for k in ndata.keys() :
+            ndata[k] = np.delete(ndata[k], rint, 0)
+        temp = ndata[ndata.keys()[0]].shape[0]
         i = (i+1)%nfolds
     return ret
 
