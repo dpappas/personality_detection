@@ -11,7 +11,7 @@ from keras.layers.convolutional import Convolution2D, MaxPooling2D
 from keras.layers.core import Dense, Reshape, Activation, Flatten, Dropout
 from keras.layers.convolutional import Convolution1D, MaxPooling1D
 from keras.callbacks import EarlyStopping
-from keras.regularizers import l1, activity_l1
+from keras.regularizers import l1, activity_l1, l2, activity_l2
 
 
 
