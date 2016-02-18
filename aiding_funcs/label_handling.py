@@ -46,7 +46,6 @@ def MaxMinReverse(mat,mins,maxs):
 def RMSE(prd,true):
     rmse = np.array(prd.shape[1]*[0.0])
     for i in range(prd.shape[1]):
-        None
         temp = (prd[:,i] - true[:,i])**2
         temp = np.sum(temp) / temp.shape[0]
         temp = temp**(1.0/2.0)

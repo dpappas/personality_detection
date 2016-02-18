@@ -60,7 +60,7 @@ import pickle
 from aiding_funcs.NN_handling.CNN import create_simple_CNN_2D, create_simple_CNN_2D_no_emb, get_CNN_results
 from aiding_funcs.NN_handling.LSTM import create_simple_LSTM, create_extreme_LSTM, create_stacked_LSTM
 from aiding_funcs.embeddings_handling import get_the_folds
-from aiding_funcs.label_handling import MaxMin
+from aiding_funcs.label_handling import MaxMin, myRMSE, MaxMinFit
 
 from keras.callbacks import EarlyStopping
 
@@ -94,12 +94,14 @@ max_input_length = test['features'].shape[1]
 is_trainable = False
 opt = 'adam'
 model = create_simple_CNN_2D (CNN_filters, CNN_rows, Dense_size, emb, max_input_length, is_trainable, opt)
-t_l, T_l = MaxMin(test['labels'], train['labels'])
-get_CNN_results(model,train['features'],T_l,train['features'],T_l)
-get_CNN_results(model,train['features'],T_l,test['features'],t_l)
 
-#t = model.fit(train['features'],T_l, batch_size=64, nb_epoch=1500)
-#scores = model.evaluate(test['features'],t_l)
+mins, maxs = MaxMin(train['labels'])
+t_l = MaxMinFit(train['labels'], mins, maxs)
+T_l = MaxMinFit(test['labels'], mins, maxs)
+t = model.fit(train['features'],T_l, batch_size=64, nb_epoch=1500)
+pred = model.predict(test['features'],t_l)
+print(myRMSE(pred, t_l, mins, maxs))
+
 
 '''
 CNN basic Trainable
