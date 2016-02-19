@@ -28,7 +28,8 @@ def MaxMin(train_labels):
 def MaxMinFit(mat, mins, maxs):
     t = np.array(mat)
     for i in range(t.shape[1]):
-       t[:,i] = (t[:, i] - mins[i])/(maxs[i]-mins[i])
+       #t[:,i] = (t[:, i] - mins[i])/(maxs[i]-mins[i])-(1.0/2.0) # metaksy -1/2 kai 1/2
+        t[:,i] = (t[:, i] - mins[i])/(maxs[i]-mins[i])
     return t
 
 def MaxMinAll(test_labels,train_labels):
