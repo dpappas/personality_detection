@@ -24,7 +24,8 @@ def create_CNN(
         max_input_length,                   # maximum length of sentences
         is_trainable,                       # True if the embedding layer is trainable
         opt = 'sgd',                        # optimizer
-        emb_size = 200                      # embedding size if embeddings not given
+        emb_size = 200,                      # embedding size if embeddings not given
+        input_dim = 500                      # input dimention if embeddings not given
     ):
     out_dim = 5
     model = Sequential()
@@ -45,7 +46,7 @@ def create_CNN(
         cols = D
         model.add(
             Embedding(
-                input_dim = embeddings.shape[0],
+                input_dim = input_dim,
                 output_dim=D,
                 trainable=True,
                 input_length = max_input_length

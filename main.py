@@ -152,7 +152,7 @@ CNN_rows = 2
 max_input_length = test['features'].shape[1]
 is_trainable = False
 opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
-model = create_CNN( CNN_filters,  CNN_rows, Dense_sizes, Dense_l2_regularizers,  Dense_acivity_l2_regularizers, embeddings=None ,  max_input_length= max_input_length, is_trainable=is_trainable, opt=opt, emb_size=200)
+model = create_CNN( CNN_filters,  CNN_rows, Dense_sizes, Dense_l2_regularizers,  Dense_acivity_l2_regularizers, embeddings=None ,  max_input_length= max_input_length, is_trainable=is_trainable, opt=opt, emb_size=200, input_dim=V.shape[0])
 t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=200 ,validation_data=(validation_data['features'],t_l))
 #t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=1000 , validation_split=0.2)
 
@@ -189,7 +189,7 @@ for i in range(max(folds.keys())):
     is_trainable = False
     opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
     emb_size = 200
-    model = create_CNN( CNN_filters, CNN_rows, Dense_sizes, Dense_l2_regularizers, Dense_acivity_l2_regularizers, None, max_input_length, is_trainable,opt, emb_size)
+    model = create_CNN( CNN_filters, CNN_rows, Dense_sizes, Dense_l2_regularizers, Dense_acivity_l2_regularizers, None, max_input_length, is_trainable,opt, emb_size, V.shape[0])
     if(weights!=None):
         model.set_weights(weights)
     else:
