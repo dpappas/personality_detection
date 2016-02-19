@@ -164,10 +164,13 @@ ena neo dictionary me keys 0:n-1 kai se kathe ena apo afta
 periexetai ena neo dictionary me keys ta idia me to data alla megethos data.shape[0]/n
 '''
 def get_the_folds(data,nfolds):
-    ndata = np.copy(data)
+    ndata = {}
+    for k in data.keys():
+        if(type(data[k]) != np.ndarray):
+            data[k] = np.array([data[k]]).T
+        ndata[k] = np.copy(data[k])
     for k in ndata.keys():
-        if(type(ndata[k]) != np.ndarray):
-            ndata[k] = np.array(ndata[k])
+        ndata[k] = np.array(ndata[k])
     ret = dict()
     m = ndata[ndata.keys()[0]].shape[0]
     for k in ndata.keys():
@@ -193,9 +196,30 @@ def get_the_folds(data,nfolds):
         i = (i+1)%nfolds
     return ret
 
+'''
 
+for f in folds.keys():
+    for k in folds[f].keys():
+        print(folds[f][k].shape)
+    print('')
 
+np.vstack( ( np.copy(folds[1]['labels']) , np.copy(folds[8]['labels']) ))
 
+'''
+
+def join_folds(folds, indexes):
+    ret = {}
+    for k in folds[folds.keys()[0]].keys():
+        ret[k] = None
+    for i in indexes:
+        for k in folds[i].keys():
+            if(ret[k] == None):
+                ret[k] = np.copy(folds[i][k])
+            else:
+                print(ret[k].shape)
+                print(folds[i][k].shape)
+                ret[k] = np.vstack( (ret[k], np.copy(folds[i][k])) )
+    return ret
 
 
 

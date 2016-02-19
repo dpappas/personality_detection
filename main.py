@@ -8,7 +8,7 @@ __author__ = 'Dimitris'
 import pickle
 from aiding_funcs.NN_handling.CNN import create_simple_CNN_2D, create_CNN
 from aiding_funcs.label_handling import MaxMin, myRMSE, MaxMinFit
-from aiding_funcs.embeddings_handling import get_the_folds
+from aiding_funcs.embeddings_handling import get_the_folds, join_folds
 
 print('loading V.p and emb.p')
 V = pickle.load( open( "./V.p", "rb" ) )
@@ -19,6 +19,20 @@ train = pickle.load( open( "./train.p", "rb" ) )
 
 print('loading test.p')
 test = pickle.load( open( "./test.p", "rb" ) )
+
+
+no_of_folds = 10
+folds = get_the_folds(train,no_of_folds)
+
+# train_data = join_folds(folds,[0,1])
+# test me afto
+
+train_data = join_folds(folds,folds.keys()[:-1])
+
+validation_data = folds[folds.keys()[-1]]
+
+
+
 
 '''
 
@@ -34,9 +48,9 @@ test = pickle.load( open( "./pickles/test.p", "rb" ) )
 CNN
 '''
 
-mins, maxs = MaxMin(train['labels'])
-T_l = MaxMinFit(train['labels'], mins, maxs)
-t_l = MaxMinFit(test['labels'], mins, maxs)
+mins, maxs = MaxMin(train_data['labels'])
+T_l = MaxMinFit(train_data['labels'], mins, maxs)
+t_l = MaxMinFit(validation_data['labels'], mins, maxs)
 
 
 Dense_sizes = [100,100,100]
@@ -60,20 +74,21 @@ model = create_CNN(
         opt = 'sgd',                        # optimizer
     )
 t = model.fit(
-    train['features'],
+    train_data['features'],
     T_l,
     batch_size=64,
-    nb_epoch=1000,
-    validation_split=0.2
+    nb_epoch=1000
+    #,validation_split=0.2
 )
 
-pred = model.predict(test['features'])
+pred = model.predict(validation_data['features'])
 print(myRMSE(pred, t_l, mins, maxs))
-pred = model.predict(train['features'])
+pred = model.predict(train_data['features'])
 print(myRMSE(pred, T_l, mins, maxs))
 
-scores = model.evaluate(train['features'],T_l)
+scores = model.evaluate(train_data['features'],T_l)
 
+scores = model.evaluate(validation_data['features'],t_l)
 
 
 
@@ -103,8 +118,6 @@ model2 = create_CNN(
 t = model2.fit( train['features'], T_l, batch_size=train['features'].shape[0], nb_epoch=200, validation_split=0.2)
 model.evaluate(train['features'],T_l)
 
-no_of_folds = 10
-folds = get_the_folds(train,no_of_folds)
 
 
 
