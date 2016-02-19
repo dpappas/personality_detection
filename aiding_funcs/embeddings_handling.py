@@ -216,8 +216,6 @@ def join_folds(folds, indexes):
             if(ret[k] == None):
                 ret[k] = np.copy(folds[i][k])
             else:
-                print(ret[k].shape)
-                print(folds[i][k].shape)
                 ret[k] = np.vstack( (ret[k], np.copy(folds[i][k])) )
     return ret
 

@@ -53,9 +53,9 @@ T_l = MaxMinFit(train_data['labels'], mins, maxs)
 t_l = MaxMinFit(validation_data['labels'], mins, maxs)
 
 
-Dense_sizes = [100,100,100]
-Dense_l2_regularizers = [0.01,0.01,0.01,0.01]
-Dense_acivity_l2_regularizers = [0.01,0.01,0.01,0.01]
+Dense_sizes = [100]
+Dense_l2_regularizers = [0.01,0.01]
+Dense_acivity_l2_regularizers = [0.01,0.01]
 CNN_filters = 10
 CNN_rows = 2
 Dense_size = 100
@@ -63,18 +63,9 @@ max_input_length = test['features'].shape[1]
 is_trainable = False
 opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
 
-model = create_CNN(
-        CNN_filters,                        # # of filters
-        CNN_rows,                           # # of rows per filter
-        Dense_sizes,                        # matrix of intermediate Dense layers
-        Dense_l2_regularizers,              # matrix with the l2 regularizers for the dense layers
-        Dense_acivity_l2_regularizers,      # matrix with the l2 activity regularizers for the dense layers
-        emb,                         # pretrained embeddings or None if there are not any
-        max_input_length,                   # maximum length of sentences
-        is_trainable,                       # True if the embedding layer is trainable
-        opt                        # optimizer
-    )
-t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=1000)
+model = create_CNN( CNN_filters,  CNN_rows, Dense_sizes, Dense_l2_regularizers,  Dense_acivity_l2_regularizers, emb,  max_input_length, is_trainable, opt )
+t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=200 ,validation_data=(validation_data['features'],t_l))
+#t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=1000 , validation_split=0.2)
 
 pred = model.predict(validation_data['features'])
 print(myRMSE(pred, t_l, mins, maxs))
@@ -89,7 +80,9 @@ print(scores)
 
 
 
+'''
 
+'''
 
 mins, maxs = MaxMin(train['labels'])
 T_l = MaxMinFit(train['labels'], mins, maxs)
@@ -112,7 +105,12 @@ scores = model.evaluate(test['features'],t_l)
 print(scores)
 
 
+
+'''
+Results on Folds
+'''
 ret = []
+weights = None
 for i in range(max(folds.keys())):
     train_folds = range(i+1)
     train_data = join_folds(folds,train_folds)
@@ -128,6 +126,10 @@ for i in range(max(folds.keys())):
     is_trainable = False
     opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
     model = create_CNN( CNN_filters, CNN_rows, Dense_sizes, Dense_l2_regularizers, Dense_acivity_l2_regularizers, emb, max_input_length, is_trainable,opt)
+    if(weights!=None):
+        model.set_weights(weights)
+    else:
+        weights = model.get_weights()
     t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=200)
     scores_on_train = model.evaluate(train_data['features'],T_l)
     scores_on_test = model.evaluate(test['features'],t_l)
@@ -138,3 +140,29 @@ for i in range(max(folds.keys())):
 
 
 
+'''
+No Embeddings
+'''
+
+Dense_sizes = [100]
+Dense_l2_regularizers = [0.01,0.01]
+Dense_acivity_l2_regularizers = [0.01,0.01]
+CNN_filters = 10
+CNN_rows = 2
+max_input_length = test['features'].shape[1]
+is_trainable = False
+opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
+
+model = create_CNN( CNN_filters,  CNN_rows, Dense_sizes, Dense_l2_regularizers,  Dense_acivity_l2_regularizers, embeddings=None ,  max_input_length= max_input_length, is_trainable=is_trainable, opt=opt)
+t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=200 ,validation_data=(validation_data['features'],t_l))
+#t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=1000 , validation_split=0.2)
+
+pred = model.predict(validation_data['features'])
+print(myRMSE(pred, t_l, mins, maxs))
+pred = model.predict(train_data['features'])
+print(myRMSE(pred, T_l, mins, maxs))
+
+scores = model.evaluate(train_data['features'],T_l)
+print(scores)
+scores = model.evaluate(validation_data['features'],t_l)
+print(scores)
