@@ -9,6 +9,10 @@ import pickle
 from aiding_funcs.NN_handling.CNN import create_simple_CNN_2D, create_CNN
 from aiding_funcs.label_handling import MaxMin, myRMSE, MaxMinFit
 from aiding_funcs.embeddings_handling import get_the_folds, join_folds
+from hyperopt import Trials, STATUS_OK, tpe
+from hyperas_approach import optim
+
+
 
 print('loading V.p and emb.p')
 V = pickle.load( open( "./V.p", "rb" ) )
@@ -28,7 +32,6 @@ folds = get_the_folds(train,no_of_folds)
 # test me afto
 
 train_data = join_folds(folds,folds.keys()[:-1])
-
 validation_data = folds[folds.keys()[-1]]
 
 
@@ -54,11 +57,10 @@ t_l = MaxMinFit(validation_data['labels'], mins, maxs)
 
 
 Dense_sizes = [100]
-Dense_l2_regularizers = [0.01,0.01]
-Dense_acivity_l2_regularizers = [0.01,0.01]
-CNN_filters = 10
-CNN_rows = 2
-Dense_size = 100
+Dense_l2_regularizers =[0.01, 0.01]
+Dense_acivity_l2_regularizers = [0.01, 0.01]
+CNN_filters = [10]
+CNN_rows = [2]
 max_input_length = test['features'].shape[1]
 is_trainable = False
 opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
