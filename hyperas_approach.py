@@ -14,8 +14,8 @@ def keras_model():
     from keras.regularizers import l1, activity_l1, l2, activity_l2
     from aiding_funcs.embeddings_handling import get_the_folds, join_folds
     import pickle
-    embeddings = pickle.load( open( "./emb.p", "rb" ) )
-    train = pickle.load( open( "./train.p", "rb" ) )
+    embeddings = pickle.load( open( "/data/dpappas/personality/emb.p", "rb" ) )
+    train = pickle.load( open( "/data/dpappas/personality/train.p", "rb" ) )
     no_of_folds = 10
     folds = get_the_folds(train,no_of_folds)
     train_data = join_folds(folds,folds.keys()[:-1])
