@@ -11,11 +11,7 @@ def create_simple_LSTM (LSTM_size, Dense_size, embeddings, max_input_length, is_
     D = embeddings.shape[-1]
     out_dim = 5
     model = Sequential()
-    model.add(Embedding(input_dim = embeddings.shape[0],
-                        output_dim=D,
-                        weights=[embeddings],
-                        trainable=is_trainable,
-                        input_length = max_input_length))
+    model.add(Embedding(input_dim = embeddings.shape[0], output_dim=D, weights=[embeddings], trainable=is_trainable, input_length = max_input_length))
     model.add(LSTM(LSTM_size, activation = 'sigmoid'))
     #model.add(Dense(Dense_size, activation = 'sigmoid',W_regularizer=l1(0.2), activity_regularizer=activity_l1(0.2)))
     model.add(Dense(Dense_size, activation = 'sigmoid'))
