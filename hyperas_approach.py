@@ -52,13 +52,13 @@ if __name__ == '__main__':
 
 Best on Validation set
 
-{'CNN_filters': 17,
- 'CNN_rows': 5,
- 'Dense_size': 9,
+{'CNN_filters': 17,                         aka 90
+ 'CNN_rows': 5,                             aka 6
+ 'Dense_size': 9,                           500
  'activity_l2': 0.569606301223449,
- 'is_trainable': 0,
+ 'is_trainable': 0,                         TRUE
  'l2': 0.36456791622174234,
- 'opt': 2}
+ 'opt': 2}                                  aka 'rmsprop'
 
 
 '''
