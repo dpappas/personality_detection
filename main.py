@@ -47,6 +47,8 @@ test = pickle.load( open( "./pickles/test.p", "rb" ) )
 
 '''
 CNN
+
+
 '''
 
 mins, maxs = MaxMin(train_data['labels'])
@@ -88,17 +90,17 @@ mins, maxs = MaxMin(train['labels'])
 T_l = MaxMinFit(train['labels'], mins, maxs)
 t_l = MaxMinFit(test['labels'], mins, maxs)
 
-Dense_sizes = [100,100,100]
-Dense_l2_regularizers = [0.01,0.01,0.01,0.01]
-Dense_acivity_l2_regularizers = [0.01,0.01,0.01,0.01]
-CNN_filters = 10
-CNN_rows = 2
+Dense_sizes = [300]
+Dense_l2_regularizers = [0.37173327555716984, 0.000165584846072854]
+Dense_acivity_l2_regularizers = [0.9593094177755246, 0.0011426757779919388]
+CNN_filters = 5
+CNN_rows = 6
 max_input_length = test['features'].shape[1]
 is_trainable = False
 opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
 
 model = create_CNN( CNN_filters, CNN_rows, Dense_sizes, Dense_l2_regularizers, Dense_acivity_l2_regularizers, emb, max_input_length, is_trainable,opt)
-t = model.fit( train['features'], T_l, batch_size=64, nb_epoch=1000)
+t = model.fit( train['features'], T_l, batch_size=64, nb_epoch=1500)
 scores = model.evaluate(train['features'],T_l)
 print(scores)
 scores = model.evaluate(test['features'],t_l)

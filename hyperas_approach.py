@@ -67,5 +67,15 @@ Best on Validation set
 
 Best on Training set
 
+{'CNN_filters': 0,                                      5
+ 'CNN_rows': 5,                                         6
+ 'Dense_size': 5,                                       300
+ 'activity_l2': 0.9593094177755246,
+ 'activity_l2_1': 0.0011426757779919388,
+ 'is_trainable': 1,                                     False
+ 'l2': 0.37173327555716984,
+ 'l2_1': 0.000165584846072854,
+ 'opt': 0                                               adadelta
+}
 
 '''
