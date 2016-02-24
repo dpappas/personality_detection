@@ -39,7 +39,7 @@ def keras_model():
     model.add(Dense(Dense_size, activation='sigmoid',W_regularizer=l2({{uniform(0, 1)}}),activity_regularizer=activity_l2({{uniform(0, 1)}})))
     model.add(Dense(out_dim, activation='linear',W_regularizer=l2({{uniform(0, 1)}}),activity_regularizer=activity_l2({{uniform(0, 1)}})))
     model.compile(loss='mse', optimizer=opt)
-    model.fit(train_data['features'], train_data['labels'], nb_epoch=50, show_accuracy=True, verbose=2)
+    model.fit(train_data['features'], train_data['labels'], nb_epoch=50, show_accuracy=False, verbose=2)
     #score = model.evaluate( validation_data['features'], validation_data['labels'])
     score = model.evaluate( train_data['features'], train_data['labels'])
     return {'loss': score, 'status': STATUS_OK}
