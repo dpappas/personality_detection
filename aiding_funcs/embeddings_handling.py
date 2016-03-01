@@ -7,6 +7,8 @@ __author__ = 'Dimitris'
 import multiprocessing as mp
 import re
 import numpy as np
+SEED = 1989
+np.random.seed(SEED)
 import random
 from aiding_funcs.file_handling import get_words_from_file
 import os

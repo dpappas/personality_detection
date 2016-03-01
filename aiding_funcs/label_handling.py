@@ -1,6 +1,9 @@
 __author__ = 'Dimitris'
 
 import numpy as np
+SEED = 1989
+np.random.seed(SEED)
+
 
 def get_maxs(train_labels):
     maxs_T = [np.max(train_labels[:,i]) for i in range(train_labels.shape[1])]

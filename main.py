@@ -4,13 +4,11 @@
 
 __author__ = 'Dimitris'
 
-
-import pickle
-from aiding_funcs.NN_handling.CNN import create_simple_CNN_2D, create_CNN
+from aiding_funcs.NN_handling.CNN import create_simple_CNN_2D, create_CNN,CNN_multimodal_model
 from aiding_funcs.label_handling import MaxMin, myRMSE, MaxMinFit
+
 from aiding_funcs.embeddings_handling import get_the_folds, join_folds
-
-
+import pickle
 
 print('loading V.p and emb.p')
 V = pickle.load( open( "/data/dpappas/personality/V.p", "rb" ) )
@@ -57,16 +55,42 @@ t_l = MaxMinFit(validation_data['labels'], mins, maxs)
 
 
 Dense_sizes = [100]
-Dense_l2_regularizers =[0.01, 0.01]
-Dense_acivity_l2_regularizers = [0.01, 0.01]
+Dense_l2_regularizers =[
+    0.01,
+    0.01
+]
+Dense_acivity_l2_regularizers = [
+    0.01,
+    0.01
+]
 CNN_filters = [10]
 CNN_rows = [2]
 max_input_length = test['features'].shape[1]
 is_trainable = False
 opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
 
-model = create_CNN( CNN_filters,  CNN_rows, Dense_sizes, Dense_l2_regularizers,  Dense_acivity_l2_regularizers, emb,  max_input_length, is_trainable, opt)
-t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=200 ,validation_data=(validation_data['features'],t_l))
+model = create_CNN(
+    CNN_filters,
+    CNN_rows,
+    Dense_sizes,
+    Dense_l2_regularizers,
+    Dense_acivity_l2_regularizers,
+    emb,
+    max_input_length,
+    is_trainable,
+    opt
+)
+
+t = model.fit(
+    train_data['features'],
+    T_l,
+    batch_size=64,
+    nb_epoch=200 ,
+    validation_data=(
+        validation_data['features'],
+        t_l
+    )
+)
 #t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=1000 , validation_split=0.2)
 
 pred = model.predict(validation_data['features'])
@@ -80,7 +104,48 @@ scores = model.evaluate(validation_data['features'],t_l)
 print(scores)
 
 
+'''
+'''
 
+mins, maxs = MaxMin(train_data['labels'])
+T_l = MaxMinFit(train_data['labels'], mins, maxs)
+t_l = MaxMinFit(validation_data['labels'], mins, maxs)
+
+Dense_sizes = [300]
+Dense_l2_regularizers = [0.37173327555716984, 0.000165584846072854]
+Dense_acivity_l2_regularizers = [0.9593094177755246, 0.0011426757779919388]
+CNN_filters = 5
+CNN_rows = 6
+max_input_length = test['features'].shape[1]
+is_trainable = False
+opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
+
+model = create_CNN( CNN_filters, CNN_rows, Dense_sizes, Dense_l2_regularizers, Dense_acivity_l2_regularizers, emb, max_input_length, is_trainable,opt)
+t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=200, validation_data=(validation_data['features'],t_l))
+scores = model.evaluate(train_data['features'],T_l)
+print(scores)
+
+
+'''
+'''
+
+
+graph = CNN_multimodal_model( T_l, train_data['features'], train_data['AV'], 300, 6, 5, emb=emb, is_trainable=False, max_input_length = max_input_length)
+graph.fit(
+    {
+        'txt_data':train_data['features'],
+        'av_data':train_data['AV'],
+        'output':T_l
+    },
+    nb_epoch=500,
+    batch_size=64
+)
+
+scores = graph.evaluate({'txt_data':train_data['features'], 'av_data':train_data['AV'], 'output':T_l})
+print('res_on_train:'+str(scores))
+
+scores = graph.evaluate({'txt_data':validation_data['features'], 'av_data':validation_data['AV'], 'output':t_l})
+print('res_on_test:'+str(scores))
 
 '''
 
@@ -110,6 +175,7 @@ print(scores)
 
 '''
 Results on Folds with embeddings
+
 '''
 ret = []
 weights = None
@@ -119,14 +185,14 @@ for i in range(max(folds.keys())):
     mins, maxs = MaxMin(train_data['labels'])
     T_l = MaxMinFit(train_data['labels'], mins, maxs)
     t_l = MaxMinFit(test['labels'], mins, maxs)
-    Dense_sizes = [100]
-    Dense_l2_regularizers = [0.36456791622174234,0.01]
-    Dense_acivity_l2_regularizers = [0.569606301223449,0.01]
-    CNN_filters = 90
+    Dense_sizes = [300]
+    Dense_l2_regularizers = [0.37173327555716984,0.000165584846072854]
+    Dense_acivity_l2_regularizers = [0.9593094177755246,0.0011426757779919388]
+    CNN_filters = 5
     CNN_rows = 6
     max_input_length = test['features'].shape[1]
     is_trainable = True
-    opt = 'rmsprop' #sgd, rmsprop, adagrad, adadelta, adam
+    opt = 'adadelta' #sgd, rmsprop, adagrad, adadelta, adam
     model = create_CNN( CNN_filters, CNN_rows, Dense_sizes, Dense_l2_regularizers, Dense_acivity_l2_regularizers, emb, max_input_length, is_trainable,opt)
     if(weights!=None):
         model.set_weights(weights)
