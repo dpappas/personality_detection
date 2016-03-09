@@ -58,7 +58,7 @@ def keras_model():
         batch_size=64
     )
     scores = graph.evaluate({'txt_data':validation_data['features'], 'av_data':validation_data['AV'], 'output':validation_data['labels']})
-
+    print(scores)
     return {'loss': scores, 'status': STATUS_OK}
 
 if __name__ == '__main__':

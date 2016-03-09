@@ -28,9 +28,11 @@ weights = None
 for i in range(max(folds.keys())):
     train_folds = range(i+1)
     train_data = join_folds(folds,train_folds)
-    mins, maxs = MaxMin(train_data['labels'])
-    T_l = MaxMinFit(train_data['labels'], mins, maxs)
-    t_l = MaxMinFit(test['labels'], mins, maxs)
+    #mins, maxs = MaxMin(train_data['labels'])
+    #T_l = MaxMinFit(train_data['labels'], mins, maxs)
+    #t_l = MaxMinFit(test['labels'], mins, maxs)
+    T_l = train_data['labels']
+    t_l = test['labels']
     Dense_sizes = [300]
     Dense_l2_regularizers = [0.37173327555716984,0.000165584846072854]
     Dense_acivity_l2_regularizers = [0.9593094177755246,0.0011426757779919388]
@@ -44,7 +46,7 @@ for i in range(max(folds.keys())):
         model.set_weights(weights)
     else:
         weights = model.get_weights()
-    t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=1200)
+    t = model.fit( train_data['features'], T_l, batch_size=64, nb_epoch=4500)
     scores_on_train = model.evaluate(train_data['features'],T_l)
     scores_on_test = model.evaluate(test['features'],t_l)
     print('mse on train : ' + str(scores_on_train))
