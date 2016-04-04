@@ -40,3 +40,37 @@ def keras_model():
 if __name__ == '__main__':
     best_run = optim.minimize(keras_model, algo=tpe.suggest, max_evals=1000, trials=Trials())
     pprint(best_run)
+
+'''
+{'Dense_size': 4,                       250
+ 'Dense_size2': 6,                      350
+ 'Dense_size3': 3,                      200
+ 'activity_l2': 0.5573412177884556,
+ 'activity_l2_1': 0.5939821569339538,
+ 'activity_l2_2': 0.18093939742300677,
+ 'activity_l2_3': 0.00023406307798754577,
+ 'l2': 0.5168386983604661,
+ 'l2_1': 0.2895406107844482,
+ 'l2_2': 0.8781331012574306,
+ 'l2_3': 0.1830181151387234,
+ 'opt': 0}                      adadelta
+
+'''
+
+
+'''
+'Dense_size': 1,                     100
+'Dense_size2': 9,                    500
+'Dense_size3': 5,                    300
+'activity_l2': 0.0014082120886226845,
+'activity_l2_1': 0.16904326507336032,
+'activity_l2_2': 0.6023544163244046,
+'activity_l2_3': 0.00012911700632491275,
+'l2': 0.6709001693961152,
+'l2_1': 0.3174644779626695,
+'l2_2': 0.13100661950020417,
+'l2_3': 0.3016331305514661,
+'opt': 0                            adadelta
+'''
+
+

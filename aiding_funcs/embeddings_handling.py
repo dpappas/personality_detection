@@ -148,6 +148,39 @@ def handle_all(scores, indexes, metr):
         'features':features
     }
 
+def handle_all_with_av(scores, indexes, metr, av):
+    row_labels = list(scores.index)
+    av_row_labels = list(av.index)
+    labels = None
+    features = None
+    names = None
+    avs = None
+    for k in indexes.keys():
+        i = row_labels.index(k)
+        j = av_row_labels.index(k)
+        label = np.array(scores.iloc[i])
+        av_row = np.array(av.iloc[j])
+        feature = indexes[k].T
+        temp = np.array((metr - feature.shape[1]) * [0])
+        feature = np.append(feature,temp)
+        name = k
+        if (labels == None):
+            labels = label
+            avs = av_row
+            features = feature
+            names = [name]
+        else:
+            labels = np.vstack((labels,label))
+            avs = np.vstack((avs,av_row))
+            features = np.vstack((features,feature))
+            names.append(name)
+    return {
+        'names':names,
+        'labels':labels,
+        'features':features,
+        'AV':avs
+    }
+
 def reshape3Dto4D(data_3D):
     return data_3D.reshape((data_3D.shape[0], 1, data_3D.shape[1], data_3D.shape[2]))
 
